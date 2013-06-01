@@ -2,7 +2,6 @@
   (:require [clj-webdriver.taxi :refer :all])
   (:gen-class :main true))
 (use 'clojure.java.io)
-(use 'clojure.pprint)
 
 (defn spitlist
   [list]
