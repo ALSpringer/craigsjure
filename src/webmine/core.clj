@@ -37,10 +37,14 @@
           (set (readlist "test.txt")))]
           (seq (find pidmap i)))))
 
-
+;first argument provided is the prefix
+;second is the suffix (for now)
+;ie. http://boston.craigslist.com/bia/
+;prefix = boston, suffix = bia
 (defn -main
   [& args]
-    (set-driver! {:browser :firefox} "http://boston.craigslist.com/bia/")
+    (set-driver! {:browser :firefox}
+      (str "http://" (first args) ".craigslist.com/" (second args) "/"))
     (let [listings (find-elements {:css ".row"})]
       (findnew listings)
       (spitlist (take 10 listings)))
