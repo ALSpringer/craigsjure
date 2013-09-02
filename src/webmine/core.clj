@@ -3,6 +3,7 @@
   (:gen-class :main true)
   (:use [clojure.java.io]
   [clojure.core]
+  [clojure.pprint]
   [clojure.string :only [split-lines, split]]
   [clojure.set :only [difference]]))
 
@@ -18,7 +19,7 @@
     (spit "test.txt"
           (str (text (find-element-under i {:css ".pl a"})) ","):append true)
     (spit "test.txt"
-         (str (text (find-element-under i {:css "span span span"})) "\n"):append true)))
+         (str (text (find-element-under i {:css "span span.price"})) "\n"):append true)))
 
 ;read the top 10 post-ids and return them
 (defn readlist
@@ -34,10 +35,9 @@
         (zipmap
           (for [i (take 10 listings)] (attribute i "data-pid"))
           (take 10 listings))]
-        (doseq [i (difference
+        (difference
           (set (keys pidmap))
-          (set (readlist "test.txt")))]
-          (seq (find pidmap i)))))
+          (set (readlist "test.txt")))))
 
 ;first argument provided is the prefix
 ;second is the suffix (for now)
@@ -50,8 +50,8 @@
     (if-not (.exists (file "test.txt"))
       (spit "test.txt" ""))
     (let [listings (find-elements {:css ".row"})]
-      (findnew listings)
+      (if (> (count (findnew listings)) 0)
+        (print "FOUND ONE NEW LISTING")
+        (print "FOUND NO NEW LISTINGS"))
       (spitlist (take 10 listings)))
     (quit))
-
-
