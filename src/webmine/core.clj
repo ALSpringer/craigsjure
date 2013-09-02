@@ -6,6 +6,8 @@
   [clojure.string :only [split-lines, split]]
   [clojure.set :only [difference]]))
 
+(import '(java.io.file))
+
 ;output the top 10 entries from cl into a file for comparison
 (defn spitlist
   [list]
@@ -45,6 +47,8 @@
   [& args]
     (set-driver! {:browser :firefox}
       (str "http://" (first args) ".craigslist.com/" (second args) "/"))
+    (if-not (.exists (file "test.txt"))
+      (spit "test.txt" ""))
     (let [listings (find-elements {:css ".row"})]
       (findnew listings)
       (spitlist (take 10 listings)))
